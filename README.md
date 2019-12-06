@@ -37,9 +37,33 @@ $ docker pull verdaccio/verdaccio
 $ docker run -it --rm --name verdaccio -p 4873:4873 verdaccio/verdaccio
 ```
 
-###### publish
+#### Adduser - vadaccio 회원추가
+
+1. create an user and log in
+
+```
+$ npm adduser --registry http://localhost:4873
+```
+
+> if you use HTTPS, add an appropriate CA information ("null" means get CA list from OS)
+
+```
+$ npm set ca null
+```
+
+#### Login
+
+> 주의 : 로그인시 scope이름을 설정해야 해당 프로젝트를 publish 할 수 있다.
+
+```
+$ npm login --registry=http://localhost:4873 --scope=<스코프 이름>
+$ npm login --registry=http://localhost:4873 --scope=@virnect
+```
+
+#### publish
 
 - 필수조건
+  - 반드시 위에 적힌 Adduser & Login과정을 거쳐야함. 특히 Login시에 scope 옵션 챙기는거 잊으면 안됨.
   - 작업중인 로컬의 package.json안에 ```private: true``` 가 없어야 함.
   - package.json의 name필드에 ```@virnect:<패키지 이름>``` 형식으로 scope가 포함되어야함. 그래야 import시 @virnect는 구축형 verdaccio에서 데이터 가져옴. 안그러면 verdaccio에 올려놓은 프로젝트를 default registry인 http://registry.npmjs.org 에서 가져옴(== 에러).
   - ```--registry```옵션을 안 줄 경우 default registry인 http://registry.npmjs.org 에 퍼블리싱됨. 주의!!!!!
@@ -50,7 +74,7 @@ $ npm publish --registry http://<내부 Verdaccio IP>:<내부 Verdaccio 포트>
 $ npm publish --registry http://localhost:4873
 ```
 
-###### import
+#### import
 
 1. .npmrc 파일을 루트에 만들고 아래 내용 입력
   ```
